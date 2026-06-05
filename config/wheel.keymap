@@ -1,0 +1,12 @@
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            bindings = <
+                &encoder_cw  KC_VOL_UP
+                &encoder_ccw KC_VOL_DOWN
+            >;
+        };
+    };
+};
