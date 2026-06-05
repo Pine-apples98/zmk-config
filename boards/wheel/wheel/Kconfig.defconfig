@@ -1,0 +1,6 @@
+if BOARD_WHEEL
+
+config SOC
+    default "nrf52840"
+
+endif

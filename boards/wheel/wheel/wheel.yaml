@@ -1,0 +1,11 @@
+identifier: wheel
+name: BenchWheel
+type: keyboard
+arch: arm
+toolchain:
+  - zephyr
+supported:
+  - usb_device
+  - ble
+flash: 1024
+ram: 256

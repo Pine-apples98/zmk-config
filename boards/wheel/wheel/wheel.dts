@@ -1,0 +1,74 @@
+/dts-v1/;
+#include <nordic/nrf52840_qiaa.dtsi>
+#include <dt-bindings/zmk/matrix_transform.h>
+
+#include "wheel-pinctrl.dtsi"
+#include "wheel-layouts.dtsi"
+
+/ {
+    model = "benchwheel";
+    compatible = "wheel";
+
+    chosen {
+        zephyr,code-partition = &code_partition;
+        zephyr,sram = &sram0;
+        zephyr,flash = &flash0;
+        zmk,physical-layout = &default_layout;
+        zmk,keyboard = &kb;
+    };
+
+    kb: kb {
+        compatible = "zmk,keyboard";
+
+        encoder0: encoder0 {
+            compatible = "zmk,encoder";
+            label = "Rotary Encoder";
+
+            a-gpios = <&gpio0 4 GPIO_ACTIVE_HIGH>;
+            b-gpios = <&gpio0 5 GPIO_ACTIVE_HIGH>;
+            steps = <4>;
+        };
+    };
+
+    default_transform: default_transform {
+        compatible = "zmk,matrix-transform";
+        columns = <1>;
+        rows = <1>;
+        map = <RC(0,0)>;
+    };
+};
+
+&gpio0 { status = "okay"; };
+&gpio1 { status = "okay"; };
+&gpiote { status = "okay"; };
+&adc { status = "okay"; };
+
+&uart0 {
+    compatible = "nordic,nrf-uarte";
+    current-speed = <115200>;
+    pinctrl-0 = <&uart0_default>;
+    pinctrl-1 = <&uart0_sleep>;
+    pinctrl-names = "default", "sleep";
+};
+
+zephyr_udc0: &usbd { status = "okay"; };
+
+&flash0 {
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        code_partition: partition@1000 {
+            reg = <DT_SIZE_K(4) DT_SIZE_K(844)>;
+        };
+
+        storage_partition: partition@d4000 {
+            reg = <DT_SIZE_K(848) DT_SIZE_K(128)>;
+        };
+
+        boot_partition: partition@f4000 {
+            reg = <DT_SIZE_K(976) DT_SIZE_K(48)>;
+        };
+    };
+};
